@@ -16,11 +16,13 @@ x, xt, y, yt = train_test_split(x, y, test_size=0.3)
 model = XGBClassifier(
     n_estimators=50, 
     max_depth=10,
-    learning_rate=0.5, 
-    objective='multi:softmax'
+    learning_rate=0.5
 )
+
+modelFit = model.fit(x,y)
 
 # Test our model using the testing data.
 pred = modelFit.predict(xt)
+
 # limit pred array to 1000 results for submission.
 pred = pred[:1000]
