@@ -9,7 +9,7 @@ data['hour'] = data['DateTime'].dt.hour # Get only hour.
 data['day'] = data['DateTime'].dt.day # Get day (date).
 
 # Designate dependent (y) and independent (y) vars.
-x = data[['Total', 'Discounts', 'hour', 'day']]
+x = data[['Total', 'Discounts', 'hour']]
 y = data['meal']
 
 # Randomly sample our data --> 70% to train with, and 30% for testing
@@ -17,8 +17,8 @@ x, xt, y, yt = train_test_split(x, y, test_size=0.3)
 
 # Create XGBoost model.
 model = XGBClassifier(
-    n_estimators=50, 
-    max_depth=10,
+    n_estimators=100, 
+    max_depth=5,
     learning_rate=0.5
 )
 
