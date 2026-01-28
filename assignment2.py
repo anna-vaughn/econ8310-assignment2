@@ -25,3 +25,4 @@ modelFit = model.fit(x,y)
 # Test our model using the testing data
 predData = predData.drop(['id', 'DateTime', 'meal'], axis=1)
 pred = modelFit.predict(predData)
+pred = pred.astype(float)
