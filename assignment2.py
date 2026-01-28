@@ -1,6 +1,5 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from xgboost import XGBClassifier
+from sklearn.tree import DecisionTreeClassifier
 
 # Get data.
 data = pd.read_csv("https://github.com/dustywhite7/Econ8310/raw/master/AssignmentData/assignment3.csv")
@@ -8,25 +7,28 @@ data['DateTime'] = pd.to_datetime(data['DateTime']) # Convert data type to datet
 data['hour'] = data['DateTime'].dt.hour # Get only hour.
 data['day'] = data['DateTime'].dt.day # Get day (date).
 
-# Designate dependent (y) and independent (y) vars.
-x = data[['Total', 'Discounts', 'hour']]
-y = data['meal']
+# Get testing data.
+## Meal is null, waiting to be filled in.
+predData = pd.read_csv("https://github.com/dustywhite7/Econ8310/raw/master/AssignmentData/assignment3test.csv")
+predData['DateTime'] = pd.to_datetime(predData['DateTime'])
+predData['hour'] = predData['DateTime'].dt.hour
+predData['month'] = predData['DateTime'].dt.month
+predData['day'] = predData['DateTime'].dt.day
 
-# Randomly sample our data --> 70% to train with, and 30% for testing
-x, xt, y, yt = train_test_split(x, y, test_size=0.3)
+# Designate dependent (y) and independent (y) vars.
+x = data[['Total', 'Discounts', 'hour', 'month' 'day']]
+y = data['meal']
 
 # Create XGBoost model.
 model = XGBClassifier(
-    n_estimators=100, 
-    max_depth=5,
-    learning_rate=0.5
+    n_estimators=150, 
+    max_depth=15,
+    learning_rate=0.5,
+    objective='binary:logistic'
 )
 
 modelFit = model.fit(x,y)
 
-# Test our model using the testing data.
-p_test = modelFit.predict(xt)
-p_test = p_test.astype(float) # To pass testValidPred.py
-
-# limit pred array to 1000 results for submission.
-pred = p_test[:1000]
+# Test our model using the testing data
+predData = predData[['Total', 'Discounts', 'hour', 'month', 'day']]
+pred = modelFit.predict(predData)
